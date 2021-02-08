@@ -1,0 +1,1696 @@
+\documentclass[11pt]{article}
+    \usepackage{kotex}
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+    \usepackage{iftex}
+    \ifPDFTeX
+    	\usepackage[T1]{fontenc}
+    	\usepackage{mathpazo}
+    \else
+    	\usepackage{fontspec}
+    \fi
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{Regression\_3112\_1037\_1037\_Hanyang\_Securities}
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb. 
+    \makeatletter
+        \newbox\Wrappedcontinuationbox 
+        \newbox\Wrappedvisiblespacebox 
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}} 
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}} 
+        \newcommand*\Wrappedcontinuationindent {3ex } 
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox} 
+        % Take advantage of the already applied Pygments mark-up to insert 
+        % potential linebreaks for TeX processing. 
+        %        {, <, #, %, $, ' and ": go to next line. 
+        %        _, }, ^, &, >, - and ~: stay at end of broken line. 
+        % Use of \textquotesingle for straight quote. 
+        \newcommand*\Wrappedbreaksatspecials {% 
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}% 
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}% 
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}% 
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}% 
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}% 
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}% 
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}% 
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}% 
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}% 
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}% 
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}% 
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}% 
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}% 
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}% 
+        } 
+        % Some characters . , ; ? ! / are not pygmentized. 
+        % This macro makes them "active" and they will insert potential linebreaks 
+        \newcommand*\Wrappedbreaksatpunct {% 
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}% 
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}% 
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}% 
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}% 
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}% 
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}% 
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}% 
+            \catcode`\.\active
+            \catcode`\,\active 
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active 
+            \lccode`\~`\~ 	
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+        
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active 	
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+    
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+\PY{k+kn}{import} \PY{n+nn}{seaborn} \PY{k}{as} \PY{n+nn}{sns}
+\PY{k+kn}{import} \PY{n+nn}{warnings}
+\PY{k+kn}{import} \PY{n+nn}{os}
+\PY{k+kn}{import} \PY{n+nn}{sys}
+\PY{k+kn}{import} \PY{n+nn}{tensorflow} \PY{k}{as} \PY{n+nn}{tf}
+
+\PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{preprocessing} \PY{k+kn}{import} \PY{n}{MinMaxScaler}
+\PY{k+kn}{from} \PY{n+nn}{tqdm} \PY{k+kn}{import} \PY{n}{tqdm}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 예측할 종목은 한양증권(001750) 입니다}
+\PY{c+c1}{\PYZsh{} 기간은 00\PYZhy{}01\PYZhy{}04 \PYZti{} 21\PYZhy{}02\PYZhy{}05 입니다}
+\PY{c+c1}{\PYZsh{} Yahoo Finanace에서 다운로드 받아 null값을 제거한 데이터를 사용합니다}
+
+\PY{n}{stock} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{C:}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{Jupyter\PYZus{}Project}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{Hanyang\PYZus{}Securities\PYZus{}F.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{df} \PY{o}{=} \PY{n}{stock}\PY{o}{.}\PY{n}{dropna}\PY{p}{(}\PY{p}{)}
+\PY{n}{df}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+         Date  Open  High   Low  Close    Adj Close  Volume
+0  2000-01-04  6300  7100  6300   7000  1619.266357   56800
+1  2000-01-05  6700  7100  6610   6700  1549.868774   52100
+2  2000-01-06  7000  7000  6250   6300  1457.339844   64900
+3  2000-01-07  6350  6600  6300   6370  1473.532349   61800
+4  2000-01-10  6610  6700  6300   6500  1503.603882   56100
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{o}{.}\PY{n}{tail}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+            Date   Open   High    Low  Close  Adj Close  Volume
+5181  2021-02-01   9200   9480   9100   9380     9380.0   81355
+5182  2021-02-02   9460   9810   9460   9700     9700.0  105755
+5183  2021-02-03   9850  10200   9800   9990     9990.0  170966
+5184  2021-02-04  10100  10200   9940  10150    10150.0  133504
+5185  2021-02-05  10200  10800  10150  10650    10650.0  247224
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} OHLC를 Adj OHLC로 바꾸기 위한 비율입니다}
+\PY{c+c1}{\PYZsh{} Adj OHLC는 과거의 절대가격을 현재 가격의 시점으로 보기위한 수정된 가격입니다}
+\PY{c+c1}{\PYZsh{} 과거 발생한 액면분할과 현금배당을 반영한 Adj Close를 기준으로 조정합니다}
+
+\PY{n}{ratio} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Adj Close}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{/}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Close}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{ratio}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+0       0.231324
+1       0.231324
+2       0.231324
+3       0.231324
+4       0.231324
+          {\ldots}
+5181    1.000000
+5182    1.000000
+5183    1.000000
+5184    1.000000
+5185    1.000000
+Length: 5186, dtype: float64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Adj Open}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Open}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{*}\PY{n}{ratio}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Adj High}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{High}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{*}\PY{n}{ratio}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Adj Low}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Low}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{*}\PY{n}{ratio}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Open}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{High}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Low}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Close}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Adj Open}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Open}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Adj High}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{High}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Adj Low}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Low}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Adj Close}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Close}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Open}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{High}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Low}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Close}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Volume}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}
+
+\PY{n}{df}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+              Open          High           Low         Close  Volume
+0      1457.339721   1642.398734   1457.339721   1619.266357   56800
+1      1549.868774   1642.398253   1529.049641   1549.868774   52100
+2      1619.266493   1619.266493   1445.773655   1457.339844   64900
+3      1468.905874   1526.736814   1457.339686   1473.532349   61800
+4      1529.049486   1549.868617   1457.339147   1503.603882   56100
+{\ldots}            {\ldots}           {\ldots}           {\ldots}           {\ldots}     {\ldots}
+5181   9200.000000   9480.000000   9100.000000   9380.000000   81355
+5182   9460.000000   9810.000000   9460.000000   9700.000000  105755
+5183   9850.000000  10200.000000   9800.000000   9990.000000  170966
+5184  10100.000000  10200.000000   9940.000000  10150.000000  133504
+5185  10200.000000  10800.000000  10150.000000  10650.000000  247224
+
+[5186 rows x 5 columns]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} MinMaxScaler 클래스를 사용하여 데이터를 스케일링 합니다.}
+\PY{c+c1}{\PYZsh{} MinMaxScaler는 데이터의 최대값이 1, 최소값이 0이 되도록 변환합니다}
+
+\PY{n}{scaler} \PY{o}{=} \PY{n}{MinMaxScaler}\PY{p}{(}\PY{p}{)}
+\PY{n}{scale\PYZus{}cols} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Open}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{High}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Low}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Close}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Volume}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{df\PYZus{}scaled} \PY{o}{=} \PY{n}{scaler}\PY{o}{.}\PY{n}{fit\PYZus{}transform}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{n}{scale\PYZus{}cols}\PY{p}{]}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} 정규화가 완료된 데이터들은 pandas dataframe으로 변환합니다}
+\PY{c+c1}{\PYZsh{} pandas는 시계열 자료에 대한 다양한 기능을 제공하여 LSTM에서 사용하는 window를 만들때 유용합니다}
+
+\PY{n}{df\PYZus{}scaled} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{df\PYZus{}scaled}\PY{p}{)}
+\PY{n}{df\PYZus{}scaled}\PY{o}{.}\PY{n}{columns} \PY{o}{=} \PY{n}{scale\PYZus{}cols}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{df\PYZus{}scaled}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+          Open      High       Low     Close    Volume
+0     0.069093  0.078420  0.072692  0.082280  0.020301
+1     0.076891  0.078420  0.078924  0.076473  0.018620
+2     0.082740  0.076587  0.071686  0.068730  0.023197
+3     0.070068  0.069256  0.072692  0.070085  0.022088
+4     0.075136  0.071089  0.072692  0.072601  0.020050
+{\ldots}        {\ldots}       {\ldots}       {\ldots}       {\ldots}       {\ldots}
+5181  0.721622  0.699387  0.736878  0.731697  0.029080
+5182  0.743534  0.725532  0.768164  0.758474  0.037804
+5183  0.776402  0.756432  0.797711  0.782742  0.061119
+5184  0.797472  0.756432  0.809878  0.796130  0.047725
+5185  0.805899  0.803969  0.828128  0.837970  0.088383
+
+[5186 rows x 5 columns]
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} window는 LSTM을 훈련하기 위한 단위로 고정된 사이즈를 가집니다}
+\PY{c+c1}{\PYZsh{} window가 12개라면 과거 시간 데이터 12개를 사용해서 다음 시간 단위의 값의 예측하게 됩니다}
+\PY{c+c1}{\PYZsh{} 테스트 기간은 21일, 따라서 5299\PYZhy{}21 : train / 21 : test}
+
+\PY{n}{window\PYZus{}size} \PY{o}{=} \PY{l+m+mi}{20}
+\PY{n}{TEST\PYZus{}SIZE} \PY{o}{=} \PY{l+m+mi}{1037}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{train} \PY{o}{=} \PY{n}{df\PYZus{}scaled}\PY{p}{[}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{n}{TEST\PYZus{}SIZE}\PY{p}{]}
+\PY{n}{test} \PY{o}{=} \PY{n}{df\PYZus{}scaled}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{n}{TEST\PYZus{}SIZE}\PY{p}{:}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{test}\PY{o}{.}\PY{n}{describe}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+              Open         High          Low        Close       Volume
+count  1037.000000  1037.000000  1037.000000  1037.000000  1037.000000
+mean      0.555879     0.526694     0.567086     0.551764     0.012608
+std       0.079533     0.076859     0.080378     0.079329     0.036624
+min       0.319620     0.315917     0.326686     0.314971     0.000169
+25\%       0.502964     0.475662     0.513952     0.498957     0.002769
+50\%       0.539574     0.509858     0.550341     0.535049     0.005645
+75\%       0.568782     0.538644     0.580720     0.565572     0.012352
+max       0.831182     0.803969     0.828128     0.837970     1.000000
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 정해진 window\PYZus{}size에 기반하여 20일 기간의 데이터 셋을 묶어준다}
+
+\PY{k}{def} \PY{n+nf}{make\PYZus{}dataset}\PY{p}{(}\PY{n}{data}\PY{p}{,} \PY{n}{label}\PY{p}{,} \PY{n}{window\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{20}\PY{p}{)}\PY{p}{:}
+    \PY{n}{feature\PYZus{}list} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+    \PY{n}{label\PYZus{}list} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{data}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{window\PYZus{}size}\PY{p}{)}\PY{p}{:}
+        \PY{n}{feature\PYZus{}list}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{data}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{n}{i}\PY{p}{:}\PY{n}{i}\PY{o}{+}\PY{n}{window\PYZus{}size}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+        \PY{n}{label\PYZus{}list}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{label}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{n}{i}\PY{o}{+}\PY{n}{window\PYZus{}size}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+    \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{feature\PYZus{}list}\PY{p}{)}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{label\PYZus{}list}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{model\PYZus{}selection} \PY{k+kn}{import} \PY{n}{train\PYZus{}test\PYZus{}split}
+
+\PY{n}{feature\PYZus{}cols} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Open}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{High}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Low}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Volume}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{label\PYZus{}cols} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Close}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+
+\PY{n}{train\PYZus{}feature} \PY{o}{=} \PY{n}{train}\PY{p}{[}\PY{n}{feature\PYZus{}cols}\PY{p}{]}
+\PY{n}{train\PYZus{}label} \PY{o}{=} \PY{n}{train}\PY{p}{[}\PY{n}{label\PYZus{}cols}\PY{p}{]}
+
+\PY{c+c1}{\PYZsh{} train dataset}
+\PY{n}{train\PYZus{}feature}\PY{p}{,} \PY{n}{train\PYZus{}label} \PY{o}{=} \PY{n}{make\PYZus{}dataset}\PY{p}{(}\PY{n}{train\PYZus{}feature}\PY{p}{,} \PY{n}{train\PYZus{}label}\PY{p}{,} \PY{l+m+mi}{20}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} train set : 모델을 학습하는 유일한 dataset}
+\PY{c+c1}{\PYZsh{} validation set : 학습이 이미 완료된 모델을 검증하기 위한 dataset(비율 0.2) }
+\PY{c+c1}{\PYZsh{} validation\PYZus{}split : X\PYZus{}train과 y\PYZus{}train에서 일정 비율을 분리하여 검증데이터로 사용}
+\PY{c+c1}{\PYZsh{} 훈련 자체에는 반영되지 않고 훈련 과정을 지켜보기 위한 용도로 사용된다}
+\PY{c+c1}{\PYZsh{} train\PYZus{}test\PYZus{}split 함수는 전체 데이터 셋 배열을 받아서 랜덤하게 훈련/테스트 데이터 셋으로 분리해주는 함수입니다}
+
+\PY{n}{x\PYZus{}train}\PY{p}{,} \PY{n}{x\PYZus{}valid}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{,} \PY{n}{y\PYZus{}valid} \PY{o}{=} \PY{n}{train\PYZus{}test\PYZus{}split}\PY{p}{(}\PY{n}{train\PYZus{}feature}\PY{p}{,} \PY{n}{train\PYZus{}label}\PY{p}{,} \PY{n}{test\PYZus{}size}\PY{o}{=}\PY{l+m+mf}{0.25}\PY{p}{)}
+
+\PY{n}{x\PYZus{}train}\PY{o}{.}\PY{n}{shape}\PY{p}{,} \PY{n}{x\PYZus{}valid}\PY{o}{.}\PY{n}{shape}
+\PY{c+c1}{\PYZsh{} ((4206, 20, 4), (1052, 20, 4))}
+
+\PY{c+c1}{\PYZsh{} test dataset : 학습과 검증이 완료된 모델의 성능을 평가하기 위한 dataset}
+\PY{n}{x\PYZus{}test} \PY{o}{=} \PY{n}{test}\PY{p}{[}\PY{n}{feature\PYZus{}cols}\PY{p}{]}
+\PY{n}{y\PYZus{}test} \PY{o}{=} \PY{n}{test}\PY{p}{[}\PY{n}{label\PYZus{}cols}\PY{p}{]}
+
+\PY{n}{x\PYZus{}test}\PY{o}{.}\PY{n}{shape}\PY{p}{,} \PY{n}{y\PYZus{}test}\PY{o}{.}\PY{n}{shape}
+\PY{c+c1}{\PYZsh{}     (21, 4),          (21, 1)  }
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+((1037, 4), (1037, 1))
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{x\PYZus{}test}\PY{p}{,} \PY{n}{y\PYZus{}test} \PY{o}{=} \PY{n}{make\PYZus{}dataset}\PY{p}{(}\PY{n}{x\PYZus{}test}\PY{p}{,} \PY{n}{y\PYZus{}test}\PY{p}{,} \PY{l+m+mi}{20}\PY{p}{)}
+
+\PY{n}{x\PYZus{}test}\PY{o}{.}\PY{n}{shape}\PY{p}{,} \PY{n}{y\PYZus{}test}\PY{o}{.}\PY{n}{shape}
+\PY{c+c1}{\PYZsh{} (21\PYZhy{}20, 20, 4),     (21\PYZhy{}20, 1)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+((1017, 20, 4), (1017, 1))
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{x\PYZus{}train}\PY{o}{.}\PY{n}{shape}\PY{p}{,} \PY{n}{x\PYZus{}valid}\PY{o}{.}\PY{n}{shape}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{o}{.}\PY{n}{shape}\PY{p}{,} \PY{n}{y\PYZus{}valid}\PY{o}{.}\PY{n}{shape}\PY{p}{,} \PY{n}{x\PYZus{}test}\PY{o}{.}\PY{n}{shape}\PY{p}{,} \PY{n}{y\PYZus{}test}\PY{o}{.}\PY{n}{shape}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+((3096, 20, 4), (1033, 20, 4), (3096, 1), (1033, 1), (1017, 20, 4), (1017, 1))
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{17}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} print proportions}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{train: }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZpc{}}\PY{l+s+s1}{ | validation: }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZpc{}}\PY{l+s+s1}{ | test }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZpc{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n+nb}{round}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{y\PYZus{}train}\PY{p}{)}\PY{o}{/}\PY{n+nb}{len}\PY{p}{(}\PY{n}{df\PYZus{}scaled}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,}
+                                                       \PY{n+nb}{round}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{y\PYZus{}valid}\PY{p}{)}\PY{o}{/}\PY{n+nb}{len}\PY{p}{(}\PY{n}{df\PYZus{}scaled}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,}
+                                                       \PY{n+nb}{round}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{y\PYZus{}test}\PY{p}{)}\PY{o}{/}\PY{n+nb}{len}\PY{p}{(}\PY{n}{df\PYZus{}scaled}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+train: 0.6\% | validation: 0.2\% | test 0.2\%
+    \end{Verbatim}
+
+    \begin{quote}
+\begin{quote}
+데이터 비율을 지정하는 방법에 대한 규칙은 없다. 다만 모델에 제공하는
+데이터를 제한하면 학습할 수 있는 내용이 제한된다. 그러나 테스트 세트가
+너무 작으면 모델 성능에 대한 정확한 추정치를 제공하지 않는다. 교차
+검증을 통해 이 상황을 쉽게 처리할 수 있다
+\end{quote}
+\end{quote}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{18}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{keras}\PY{n+nn}{.}\PY{n+nn}{models} \PY{k+kn}{import} \PY{n}{Sequential}
+\PY{k+kn}{from} \PY{n+nn}{keras}\PY{n+nn}{.}\PY{n+nn}{layers} \PY{k+kn}{import} \PY{n}{Dense}
+\PY{k+kn}{from} \PY{n+nn}{keras}\PY{n+nn}{.}\PY{n+nn}{callbacks} \PY{k+kn}{import} \PY{n}{EarlyStopping}\PY{p}{,} \PY{n}{ModelCheckpoint}
+\PY{k+kn}{from} \PY{n+nn}{keras}\PY{n+nn}{.}\PY{n+nn}{layers} \PY{k+kn}{import} \PY{n}{LSTM}
+
+\PY{c+c1}{\PYZsh{} LSTM은 RNN 알고리즘의 특별한 한 종류입니다. }
+\PY{c+c1}{\PYZsh{} LSTM은 긴 의존기간을 필요로 하는 데이터를 학습하는데 효과적인 모델입니다}
+\PY{c+c1}{\PYZsh{} 이 모델은 add함수를 사용하여 레이어들을 선형으로 쌓는 Sequential Model 입니다}
+\PY{c+c1}{\PYZsh{} 16 메모리 셀을 가진 LSTM 레이어 하나와 Dense 레이어 하나(output)을 사용합니다}
+\PY{c+c1}{\PYZsh{} input\PYZus{}shape는 input이 어떤 모양으로 들어올지에 대한 정보입니다. 데이터 개수는 중요하지 않기에 window\PYZus{}size와 feature만 알려주면 된다}
+\PY{c+c1}{\PYZsh{} train\PYZus{}feature.shape[1] = window\PYZus{}size / train\PYZus{}feature.shape[2] = [\PYZsq{}Open\PYZsq{}, \PYZsq{}High\PYZsq{}, \PYZsq{}Low\PYZsq{}, \PYZsq{}Volume\PYZsq{}]}
+\PY{c+c1}{\PYZsh{} 예측하고자 하는 target 개수가 하나이므로 Dense(1)dl 출력으로 사용됩니다}
+
+\PY{n}{model} \PY{o}{=} \PY{n}{Sequential}\PY{p}{(}\PY{p}{)}
+\PY{n}{model}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n}{LSTM}\PY{p}{(}\PY{l+m+mi}{20}\PY{p}{,} 
+               \PY{n}{input\PYZus{}shape}\PY{o}{=}\PY{p}{(}\PY{n}{x\PYZus{}test}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{x\PYZus{}test}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}\PY{p}{,} 
+               \PY{n}{activation}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{relu}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+               \PY{n}{return\PYZus{}sequences}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+          \PY{p}{)}
+\PY{n}{model}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n}{Dense}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{19}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{model}\PY{o}{.}\PY{n}{summary}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Model: "sequential"
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+Layer (type)                 Output Shape              Param \#
+=================================================================
+lstm (LSTM)                  (None, 20)                2000
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+dense (Dense)                (None, 1)                 21
+=================================================================
+Total params: 2,021
+Trainable params: 2,021
+Non-trainable params: 0
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{20}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{x\PYZus{}test}\PY{o}{.}\PY{n}{shape}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{20}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+(1017, 20, 4)
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{21}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} val\PYZus{}loss가 10회 같을 시 early\PYZus{}stop, batch\PYZus{}size(=K)는 K문제 풀고 답보고 하는 식}
+\PY{c+c1}{\PYZsh{} 위에서 모델을 구성한 후 compile 메서드를 호출하여 학습과정을 설정합니다}
+\PY{c+c1}{\PYZsh{} optimizer : 훈련 과정을 설정한다}
+\PY{c+c1}{\PYZsh{} loss : 최적화 과정에서 최소화될 손실 함수(loss function)을 설정합니다}
+\PY{c+c1}{\PYZsh{} metrics : 훈련을 모니터링하기 위해 사용됩니다}
+\PY{c+c1}{\PYZsh{} validation\PYZus{}data = 검증 데이터를 사용합니다. 각 에포크마다 정확도도 함께 출력됩니다}
+\PY{c+c1}{\PYZsh{} 이 정확도는 훈련이 잘 되고 있는지를 보여줄 뿐이며 실제로 모델이 검증데이터를 학습하지는 않습니다}
+\PY{c+c1}{\PYZsh{} 검증 데이터의 loss가 낮아지다가 높아지기 시작하면 overfitting의 신호입니다}
+\PY{c+c1}{\PYZsh{} verbose / 0 : 출력 없음 / 1 : 훈련 진행도 보여주는 진행 막대 보여줌 / 2 : 미니 배치마다 손실 정보 출력}
+
+\PY{k+kn}{from} \PY{n+nn}{numpy} \PY{k+kn}{import} \PY{n}{array}
+\PY{k+kn}{from} \PY{n+nn}{keras}\PY{n+nn}{.}\PY{n+nn}{models} \PY{k+kn}{import} \PY{n}{Sequential}
+\PY{k+kn}{from} \PY{n+nn}{keras}\PY{n+nn}{.}\PY{n+nn}{layers} \PY{k+kn}{import} \PY{n}{Dense}
+\PY{k+kn}{from} \PY{n+nn}{keras} \PY{k+kn}{import} \PY{n}{backend} \PY{k}{as} \PY{n}{K}
+
+\PY{k}{def} \PY{n+nf}{RMSE}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{K}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{K}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{K}\PY{o}{.}\PY{n}{square}\PY{p}{(}\PY{n}{y\PYZus{}pred} \PY{o}{\PYZhy{}} \PY{n}{y\PYZus{}true}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+
+\PY{k}{def} \PY{n+nf}{soft\PYZus{}acc}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{K}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{K}\PY{o}{.}\PY{n}{equal}\PY{p}{(}\PY{n}{K}\PY{o}{.}\PY{n}{round}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{)}\PY{p}{,} \PY{n}{K}\PY{o}{.}\PY{n}{round}\PY{p}{(}\PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+
+\PY{k}{def} \PY{n+nf}{MPE}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{p}{:} 
+    \PY{k}{return} \PY{n}{K}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{(}\PY{n}{y\PYZus{}true} \PY{o}{\PYZhy{}} \PY{n}{y\PYZus{}pred}\PY{p}{)} \PY{o}{/} \PY{n}{y\PYZus{}true}\PY{p}{)} \PY{o}{*} \PY{l+m+mi}{100}
+    
+\PY{k}{def} \PY{n+nf}{MSLE}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{K}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{K}\PY{o}{.}\PY{n}{square}\PY{p}{(}\PY{n}{K}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{K}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{y\PYZus{}pred}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
+
+\PY{k}{def} \PY{n+nf}{RMSLE}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{K}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{K}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{K}\PY{o}{.}\PY{n}{square}\PY{p}{(}\PY{n}{K}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{K}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{y\PYZus{}pred}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+
+\PY{k}{def} \PY{n+nf}{R2}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{p}{:}
+    \PY{n}{SS\PYZus{}res} \PY{o}{=} \PY{n}{K}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{n}{K}\PY{o}{.}\PY{n}{square}\PY{p}{(}\PY{n}{y\PYZus{}true} \PY{o}{\PYZhy{}} \PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{p}{)}
+    \PY{n}{SS\PYZus{}tot} \PY{o}{=} \PY{n}{K}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{n}{K}\PY{o}{.}\PY{n}{square}\PY{p}{(}\PY{n}{y\PYZus{}true} \PY{o}{\PYZhy{}} \PY{n}{K}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+    \PY{k}{return} \PY{p}{(} \PY{l+m+mi}{1} \PY{o}{\PYZhy{}} \PY{n}{SS\PYZus{}res}\PY{o}{/}\PY{p}{(}\PY{n}{SS\PYZus{}tot} \PY{o}{+} \PY{n}{K}\PY{o}{.}\PY{n}{epsilon}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+    
+\PY{n}{model}\PY{o}{.}\PY{n}{compile}\PY{p}{(}\PY{n}{loss} \PY{o}{=} \PY{n}{RMSE}\PY{p}{,} \PY{n}{optimizer}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{adam}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{metrics}\PY{o}{=}\PY{p}{[}\PY{n}{soft\PYZus{}acc}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{mse}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{mae}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{RMSE}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{mape}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{MPE}\PY{p}{,} \PY{n}{MSLE}\PY{p}{,} \PY{n}{RMSLE}\PY{p}{,} \PY{n}{R2}\PY{p}{]}\PY{p}{)}
+
+\PY{n}{early\PYZus{}stop} \PY{o}{=} \PY{n}{EarlyStopping}\PY{p}{(}\PY{n}{monitor}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{val\PYZus{}loss}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{patience}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{)}
+\PY{n}{filename} \PY{o}{=} \PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{tmp}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ckeckpointer.ckpt}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{checkpoint} \PY{o}{=} \PY{n}{ModelCheckpoint}\PY{p}{(}\PY{n}{filename}\PY{p}{,} \PY{n}{monitor}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{val\PYZus{}loss}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{verbose}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{save\PYZus{}best\PYZus{}only}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{mode}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{auto}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{n}{history} \PY{o}{=} \PY{n}{model}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{x\PYZus{}train}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{,} 
+                    \PY{n}{epochs}\PY{o}{=}\PY{l+m+mi}{200}\PY{p}{,} 
+                    \PY{n}{batch\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{128}\PY{p}{,}
+                    \PY{n}{validation\PYZus{}data}\PY{o}{=}\PY{p}{(}\PY{n}{x\PYZus{}valid}\PY{p}{,} \PY{n}{y\PYZus{}valid}\PY{p}{)}\PY{p}{,} 
+                    \PY{n}{callbacks}\PY{o}{=}\PY{p}{[}\PY{n}{early\PYZus{}stop}\PY{p}{,} \PY{n}{checkpoint}\PY{p}{]}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} score\PYZus{}test를 만들면 테스트가 더이상 테스트가 아니고, 처음부터 모든 데이터에 대해 학습한 것과 같기 때문에 일반화 할 수 없는 모델을 만드는 것과 같다.}
+
+
+\PY{n}{score\PYZus{}train} \PY{o}{=} \PY{n}{model}\PY{o}{.}\PY{n}{evaluate}\PY{p}{(}\PY{n}{x\PYZus{}train}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{,} \PY{n}{batch\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{128}\PY{p}{)}
+\PY{n}{score\PYZus{}validation} \PY{o}{=} \PY{n}{model}\PY{o}{.}\PY{n}{evaluate}\PY{p}{(}\PY{n}{x\PYZus{}valid}\PY{p}{,} \PY{n}{y\PYZus{}valid}\PY{p}{,} \PY{n}{batch\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{128}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Epoch 1/200
+25/25 [==============================] - 4s 81ms/step - loss: 0.3880 - soft\_acc:
+0.8765 - mse: 0.1513 - mae: 0.3176 - RMSE: 0.3878 - mape: 1869.4305 - MPE: -inf
+- MSLE: 0.1038 - RMSLE: 0.2679 - R2: -2.7005 - val\_loss: 0.3190 - val\_soft\_acc:
+0.8687 - val\_mse: 0.1020 - val\_mae: 0.2512 - val\_RMSE: 0.3133 - val\_mape:
+85.8997 - val\_MPE: 38.0505 - val\_MSLE: 0.0626 - val\_RMSLE: 0.2014 - val\_R2:
+-1.2675
+
+Epoch 00001: val\_loss improved from inf to 0.31901, saving model to
+tmp\textbackslash{}ckeckpointer.ckpt
+INFO:tensorflow:Assets written to: tmp\textbackslash{}ckeckpointer.ckpt\textbackslash{}assets
+Epoch 2/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.2765 - soft\_acc:
+0.8759 - mse: 0.0778 - mae: 0.2219 - RMSE: 0.2761 - mape: 26597.1178 - MPE: -inf
+- MSLE: 0.0469 - RMSLE: 0.1762 - R2: -0.8739 - val\_loss: 0.0954 - val\_soft\_acc:
+0.9269 - val\_mse: 0.0091 - val\_mae: 0.0882 - val\_RMSE: 0.0959 - val\_mape:
+143.6386 - val\_MPE: -110.3536 - val\_MSLE: 0.0055 - val\_RMSLE: 0.0691 - val\_R2:
+0.7838
+
+Epoch 00002: val\_loss improved from 0.31901 to 0.09544, saving model to
+tmp\textbackslash{}ckeckpointer.ckpt
+INFO:tensorflow:Assets written to: tmp\textbackslash{}ckeckpointer.ckpt\textbackslash{}assets
+Epoch 3/200
+25/25 [==============================] - 0s 9ms/step - loss: 0.0830 - soft\_acc:
+0.9552 - mse: 0.0070 - mae: 0.0652 - RMSE: 0.0829 - mape: 16373.9791 - MPE: -inf
+- MSLE: 0.0042 - RMSLE: 0.0518 - R2: 0.8344 - val\_loss: 0.0638 - val\_soft\_acc:
+0.9651 - val\_mse: 0.0041 - val\_mae: 0.0460 - val\_RMSE: 0.0639 - val\_mape:
+117.1206 - val\_MPE: -107.0139 - val\_MSLE: 0.0025 - val\_RMSLE: 0.0370 - val\_R2:
+0.9043
+
+Epoch 00003: val\_loss improved from 0.09544 to 0.06384, saving model to
+tmp\textbackslash{}ckeckpointer.ckpt
+INFO:tensorflow:Assets written to: tmp\textbackslash{}ckeckpointer.ckpt\textbackslash{}assets
+Epoch 4/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0523 - soft\_acc:
+0.9657 - mse: 0.0028 - mae: 0.0407 - RMSE: 0.0522 - mape: 7257.6892 - MPE: -inf
+- MSLE: 0.0017 - RMSLE: 0.0323 - R2: 0.9312 - val\_loss: 0.0358 - val\_soft\_acc:
+0.9668 - val\_mse: 0.0013 - val\_mae: 0.0208 - val\_RMSE: 0.0363 - val\_mape:
+33.0372 - val\_MPE: -26.7043 - val\_MSLE: 5.3926e-04 - val\_RMSLE: 0.0152 - val\_R2:
+0.9682
+
+Epoch 00004: val\_loss improved from 0.06384 to 0.03581, saving model to
+tmp\textbackslash{}ckeckpointer.ckpt
+INFO:tensorflow:Assets written to: tmp\textbackslash{}ckeckpointer.ckpt\textbackslash{}assets
+Epoch 5/200
+25/25 [==============================] - 0s 9ms/step - loss: 0.0275 - soft\_acc:
+0.9705 - mse: 7.8456e-04 - mae: 0.0165 - RMSE: 0.0275 - mape: 2546.9461 - MPE:
+-inf - MSLE: 3.4091e-04 - RMSLE: 0.0120 - R2: 0.9813 - val\_loss: 0.0278 -
+val\_soft\_acc: 0.9555 - val\_mse: 7.9019e-04 - val\_mae: 0.0176 - val\_RMSE: 0.0292
+- val\_mape: 10.9165 - val\_MPE: 3.8695 - val\_MSLE: 3.4885e-04 - val\_RMSLE: 0.0127
+- val\_R2: 0.9786
+
+Epoch 00005: val\_loss improved from 0.03581 to 0.02781, saving model to
+tmp\textbackslash{}ckeckpointer.ckpt
+INFO:tensorflow:Assets written to: tmp\textbackslash{}ckeckpointer.ckpt\textbackslash{}assets
+Epoch 6/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0243 - soft\_acc:
+0.9732 - mse: 6.1030e-04 - mae: 0.0152 - RMSE: 0.0243 - mape: 6330.5447 - MPE:
+-inf - MSLE: 2.7210e-04 - RMSLE: 0.0110 - R2: 0.9858 - val\_loss: 0.0234 -
+val\_soft\_acc: 0.9694 - val\_mse: 5.5810e-04 - val\_mae: 0.0132 - val\_RMSE: 0.0248
+- val\_mape: 10.3574 - val\_MPE: -3.9734 - val\_MSLE: 2.3525e-04 - val\_RMSLE:
+0.0094 - val\_R2: 0.9845
+
+Epoch 00006: val\_loss improved from 0.02781 to 0.02339, saving model to
+tmp\textbackslash{}ckeckpointer.ckpt
+INFO:tensorflow:Assets written to: tmp\textbackslash{}ckeckpointer.ckpt\textbackslash{}assets
+Epoch 7/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0210 - soft\_acc:
+0.9788 - mse: 4.5956e-04 - mae: 0.0123 - RMSE: 0.0210 - mape: 1740.6762 - MPE:
+-inf - MSLE: 2.1007e-04 - RMSLE: 0.0089 - R2: 0.9891 - val\_loss: 0.0231 -
+val\_soft\_acc: 0.9712 - val\_mse: 5.4654e-04 - val\_mae: 0.0131 - val\_RMSE: 0.0244
+- val\_mape: 10.3307 - val\_MPE: -5.1015 - val\_MSLE: 2.2895e-04 - val\_RMSLE:
+0.0093 - val\_R2: 0.9851
+
+Epoch 00007: val\_loss improved from 0.02339 to 0.02314, saving model to
+tmp\textbackslash{}ckeckpointer.ckpt
+INFO:tensorflow:Assets written to: tmp\textbackslash{}ckeckpointer.ckpt\textbackslash{}assets
+Epoch 8/200
+25/25 [==============================] - 0s 9ms/step - loss: 0.0213 - soft\_acc:
+0.9790 - mse: 4.7408e-04 - mae: 0.0121 - RMSE: 0.0214 - mape: 333.6890 - MPE:
+-inf - MSLE: 2.0479e-04 - RMSLE: 0.0087 - R2: 0.9889 - val\_loss: 0.0221 -
+val\_soft\_acc: 0.9720 - val\_mse: 4.9916e-04 - val\_mae: 0.0123 - val\_RMSE: 0.0233
+- val\_mape: 10.0658 - val\_MPE: -5.0937 - val\_MSLE: 2.0983e-04 - val\_RMSLE:
+0.0087 - val\_R2: 0.9862
+
+Epoch 00008: val\_loss improved from 0.02314 to 0.02208, saving model to
+tmp\textbackslash{}ckeckpointer.ckpt
+INFO:tensorflow:Assets written to: tmp\textbackslash{}ckeckpointer.ckpt\textbackslash{}assets
+Epoch 9/200
+25/25 [==============================] - 0s 9ms/step - loss: 0.0200 - soft\_acc:
+0.9738 - mse: 4.1408e-04 - mae: 0.0122 - RMSE: 0.0200 - mape: 12253.4055 - MPE:
+-inf - MSLE: 1.8608e-04 - RMSLE: 0.0088 - R2: 0.9907 - val\_loss: 0.0214 -
+val\_soft\_acc: 0.9729 - val\_mse: 4.6988e-04 - val\_mae: 0.0116 - val\_RMSE: 0.0226
+- val\_mape: 7.4660 - val\_MPE: -2.4444 - val\_MSLE: 1.9435e-04 - val\_RMSLE: 0.0082
+- val\_R2: 0.9871
+
+Epoch 00009: val\_loss improved from 0.02208 to 0.02138, saving model to
+tmp\textbackslash{}ckeckpointer.ckpt
+INFO:tensorflow:Assets written to: tmp\textbackslash{}ckeckpointer.ckpt\textbackslash{}assets
+Epoch 10/200
+25/25 [==============================] - ETA: 0s - loss: 0.0199 - soft\_acc:
+0.9830 - mse: 4.1242e-04 - mae: 0.0112 - RMSE: 0.0199 - mape: 7.1733 - MPE:
+-1.1896 - MSLE: 1.8140e-04 - RMSLE: 0.0081 - R2: 0.989 - 0s 8ms/step - loss:
+0.0197 - soft\_acc: 0.9823 - mse: 4.0163e-04 - mae: 0.0111 - RMSE: 0.0196 - mape:
+293.6921 - MPE: -inf - MSLE: 1.7680e-04 - RMSLE: 0.0080 - R2: 0.9903 - val\_loss:
+0.0217 - val\_soft\_acc: 0.9703 - val\_mse: 4.8178e-04 - val\_mae: 0.0124 -
+val\_RMSE: 0.0229 - val\_mape: 7.9044 - val\_MPE: -1.5238 - val\_MSLE: 2.0242e-04 -
+val\_RMSLE: 0.0088 - val\_R2: 0.9866
+
+Epoch 00010: val\_loss did not improve from 0.02138
+Epoch 11/200
+25/25 [==============================] - 0s 10ms/step - loss: 0.0188 - soft\_acc:
+0.9789 - mse: 3.6545e-04 - mae: 0.0110 - RMSE: 0.0188 - mape: 1170.1042 - MPE:
+-inf - MSLE: 1.6173e-04 - RMSLE: 0.0079 - R2: 0.9915 - val\_loss: 0.0205 -
+val\_soft\_acc: 0.9729 - val\_mse: 4.3492e-04 - val\_mae: 0.0110 - val\_RMSE: 0.0217
+- val\_mape: 6.9849 - val\_MPE: -1.8560 - val\_MSLE: 1.7883e-04 - val\_RMSLE: 0.0077
+- val\_R2: 0.9880
+
+Epoch 00011: val\_loss improved from 0.02138 to 0.02054, saving model to
+tmp\textbackslash{}ckeckpointer.ckpt
+INFO:tensorflow:Assets written to: tmp\textbackslash{}ckeckpointer.ckpt\textbackslash{}assets
+Epoch 12/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0188 - soft\_acc:
+0.9783 - mse: 3.6398e-04 - mae: 0.0103 - RMSE: 0.0187 - mape: 780.7187 - MPE:
+-inf - MSLE: 1.5757e-04 - RMSLE: 0.0073 - R2: 0.9914 - val\_loss: 0.0203 -
+val\_soft\_acc: 0.9720 - val\_mse: 4.2666e-04 - val\_mae: 0.0108 - val\_RMSE: 0.0215
+- val\_mape: 6.6287 - val\_MPE: -1.2335 - val\_MSLE: 1.7467e-04 - val\_RMSLE: 0.0076
+- val\_R2: 0.9883
+
+Epoch 00012: val\_loss improved from 0.02054 to 0.02032, saving model to
+tmp\textbackslash{}ckeckpointer.ckpt
+INFO:tensorflow:Assets written to: tmp\textbackslash{}ckeckpointer.ckpt\textbackslash{}assets
+Epoch 13/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0186 - soft\_acc:
+0.9835 - mse: 3.5768e-04 - mae: 0.0101 - RMSE: 0.0187 - mape: 48.1493 - MPE:
+-inf - MSLE: 1.5274e-04 - RMSLE: 0.0072 - R2: 0.9914 - val\_loss: 0.0226 -
+val\_soft\_acc: 0.9616 - val\_mse: 5.2460e-04 - val\_mae: 0.0138 - val\_RMSE: 0.0234
+- val\_mape: 10.9509 - val\_MPE: -8.8762 - val\_MSLE: 2.1896e-04 - val\_RMSLE:
+0.0098 - val\_R2: 0.9865
+
+Epoch 00013: val\_loss did not improve from 0.02032
+Epoch 14/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0202 - soft\_acc:
+0.9802 - mse: 4.3468e-04 - mae: 0.0120 - RMSE: 0.0203 - mape: 974.8507 - MPE:
+-inf - MSLE: 1.8545e-04 - RMSLE: 0.0086 - R2: 0.9901 - val\_loss: 0.0200 -
+val\_soft\_acc: 0.9712 - val\_mse: 4.1229e-04 - val\_mae: 0.0109 - val\_RMSE: 0.0212
+- val\_mape: 6.3493 - val\_MPE: 0.1461 - val\_MSLE: 1.7014e-04 - val\_RMSLE: 0.0077
+- val\_R2: 0.9885
+
+Epoch 00014: val\_loss improved from 0.02032 to 0.01998, saving model to
+tmp\textbackslash{}ckeckpointer.ckpt
+INFO:tensorflow:Assets written to: tmp\textbackslash{}ckeckpointer.ckpt\textbackslash{}assets
+Epoch 15/200
+25/25 [==============================] - 0s 9ms/step - loss: 0.0192 - soft\_acc:
+0.9808 - mse: 3.8097e-04 - mae: 0.0105 - RMSE: 0.0192 - mape: 375.2020 - MPE:
+-inf - MSLE: 1.6094e-04 - RMSLE: 0.0075 - R2: 0.9913 - val\_loss: 0.0198 -
+val\_soft\_acc: 0.9720 - val\_mse: 4.0708e-04 - val\_mae: 0.0113 - val\_RMSE: 0.0209
+- val\_mape: 6.3737 - val\_MPE: 1.6391 - val\_MSLE: 1.6979e-04 - val\_RMSLE: 0.0080
+- val\_R2: 0.9889
+
+Epoch 00015: val\_loss improved from 0.01998 to 0.01985, saving model to
+tmp\textbackslash{}ckeckpointer.ckpt
+INFO:tensorflow:Assets written to: tmp\textbackslash{}ckeckpointer.ckpt\textbackslash{}assets
+Epoch 16/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0175 - soft\_acc:
+0.9828 - mse: 3.1733e-04 - mae: 0.0099 - RMSE: 0.0175 - mape: 110.8316 - MPE:
+-inf - MSLE: 1.4014e-04 - RMSLE: 0.0071 - R2: 0.9923 - val\_loss: 0.0194 -
+val\_soft\_acc: 0.9703 - val\_mse: 3.9178e-04 - val\_mae: 0.0106 - val\_RMSE: 0.0204
+- val\_mape: 6.5014 - val\_MPE: 2.6541 - val\_MSLE: 1.6205e-04 - val\_RMSLE: 0.0076
+- val\_R2: 0.9895
+
+Epoch 00016: val\_loss improved from 0.01985 to 0.01945, saving model to
+tmp\textbackslash{}ckeckpointer.ckpt
+INFO:tensorflow:Assets written to: tmp\textbackslash{}ckeckpointer.ckpt\textbackslash{}assets
+Epoch 17/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0186 - soft\_acc:
+0.9826 - mse: 3.5554e-04 - mae: 0.0104 - RMSE: 0.0186 - mape: 690.9058 - MPE:
+-inf - MSLE: 1.5286e-04 - RMSLE: 0.0075 - R2: 0.9918 - val\_loss: 0.0190 -
+val\_soft\_acc: 0.9703 - val\_mse: 3.7433e-04 - val\_mae: 0.0102 - val\_RMSE: 0.0200
+- val\_mape: 5.9632 - val\_MPE: 0.6051 - val\_MSLE: 1.5380e-04 - val\_RMSLE: 0.0072
+- val\_R2: 0.9900
+
+Epoch 00017: val\_loss improved from 0.01945 to 0.01901, saving model to
+tmp\textbackslash{}ckeckpointer.ckpt
+INFO:tensorflow:Assets written to: tmp\textbackslash{}ckeckpointer.ckpt\textbackslash{}assets
+Epoch 18/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0174 - soft\_acc:
+0.9855 - mse: 3.2335e-04 - mae: 0.0097 - RMSE: 0.0174 - mape: 79.2738 - MPE: inf
+- MSLE: 1.4420e-04 - RMSLE: 0.0070 - R2: 0.9926 - val\_loss: 0.0188 -
+val\_soft\_acc: 0.9729 - val\_mse: 3.6781e-04 - val\_mae: 0.0101 - val\_RMSE: 0.0198
+- val\_mape: 6.3844 - val\_MPE: -1.9029 - val\_MSLE: 1.5069e-04 - val\_RMSLE: 0.0071
+- val\_R2: 0.9901
+
+Epoch 00018: val\_loss improved from 0.01901 to 0.01884, saving model to
+tmp\textbackslash{}ckeckpointer.ckpt
+INFO:tensorflow:Assets written to: tmp\textbackslash{}ckeckpointer.ckpt\textbackslash{}assets
+Epoch 19/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0173 - soft\_acc:
+0.9841 - mse: 3.2168e-04 - mae: 0.0099 - RMSE: 0.0173 - mape: 6298.2121 - MPE:
+-inf - MSLE: 1.3933e-04 - RMSLE: 0.0072 - R2: 0.9928 - val\_loss: 0.0184 -
+val\_soft\_acc: 0.9720 - val\_mse: 3.5183e-04 - val\_mae: 0.0102 - val\_RMSE: 0.0194
+- val\_mape: 8.1452 - val\_MPE: -4.7442 - val\_MSLE: 1.4613e-04 - val\_RMSLE: 0.0073
+- val\_R2: 0.9904
+
+Epoch 00019: val\_loss improved from 0.01884 to 0.01842, saving model to
+tmp\textbackslash{}ckeckpointer.ckpt
+INFO:tensorflow:Assets written to: tmp\textbackslash{}ckeckpointer.ckpt\textbackslash{}assets
+Epoch 20/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0172 - soft\_acc:
+0.9810 - mse: 3.0739e-04 - mae: 0.0096 - RMSE: 0.0172 - mape: 2382.2863 - MPE:
+-inf - MSLE: 1.3669e-04 - RMSLE: 0.0069 - R2: 0.9925 - val\_loss: 0.0189 -
+val\_soft\_acc: 0.9712 - val\_mse: 3.6875e-04 - val\_mae: 0.0105 - val\_RMSE: 0.0197
+- val\_mape: 7.5009 - val\_MPE: -4.6798 - val\_MSLE: 1.5221e-04 - val\_RMSLE: 0.0074
+- val\_R2: 0.9903
+
+Epoch 00020: val\_loss did not improve from 0.01842
+Epoch 21/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0171 - soft\_acc:
+0.9805 - mse: 2.9841e-04 - mae: 0.0100 - RMSE: 0.0170 - mape: 444.5656 - MPE:
+-inf - MSLE: 1.3373e-04 - RMSLE: 0.0072 - R2: 0.9928 - val\_loss: 0.0192 -
+val\_soft\_acc: 0.9712 - val\_mse: 3.8082e-04 - val\_mae: 0.0107 - val\_RMSE: 0.0200
+- val\_mape: 7.1463 - val\_MPE: -4.2206 - val\_MSLE: 1.5638e-04 - val\_RMSLE: 0.0075
+- val\_R2: 0.9901
+
+Epoch 00021: val\_loss did not improve from 0.01842
+Epoch 22/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0173 - soft\_acc:
+0.9823 - mse: 3.1395e-04 - mae: 0.0100 - RMSE: 0.0173 - mape: 7.5945 - MPE: -inf
+- MSLE: 1.3748e-04 - RMSLE: 0.0072 - R2: 0.9925 - val\_loss: 0.0180 -
+val\_soft\_acc: 0.9720 - val\_mse: 3.3642e-04 - val\_mae: 0.0100 - val\_RMSE: 0.0190
+- val\_mape: 5.9931 - val\_MPE: 2.0080 - val\_MSLE: 1.4036e-04 - val\_RMSLE: 0.0071
+- val\_R2: 0.9908
+
+Epoch 00022: val\_loss improved from 0.01842 to 0.01803, saving model to
+tmp\textbackslash{}ckeckpointer.ckpt
+INFO:tensorflow:Assets written to: tmp\textbackslash{}ckeckpointer.ckpt\textbackslash{}assets
+Epoch 23/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0167 - soft\_acc:
+0.9843 - mse: 2.8995e-04 - mae: 0.0095 - RMSE: 0.0167 - mape: 3838.1649 - MPE:
+-inf - MSLE: 1.2549e-04 - RMSLE: 0.0068 - R2: 0.9931 - val\_loss: 0.0179 -
+val\_soft\_acc: 0.9720 - val\_mse: 3.3162e-04 - val\_mae: 0.0100 - val\_RMSE: 0.0189
+- val\_mape: 5.8429 - val\_MPE: 0.8401 - val\_MSLE: 1.3806e-04 - val\_RMSLE: 0.0071
+- val\_R2: 0.9909
+
+Epoch 00023: val\_loss improved from 0.01803 to 0.01790, saving model to
+tmp\textbackslash{}ckeckpointer.ckpt
+INFO:tensorflow:Assets written to: tmp\textbackslash{}ckeckpointer.ckpt\textbackslash{}assets
+Epoch 24/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0166 - soft\_acc:
+0.9820 - mse: 2.8415e-04 - mae: 0.0094 - RMSE: 0.0165 - mape: 1147.4901 - MPE:
+-inf - MSLE: 1.2470e-04 - RMSLE: 0.0067 - R2: 0.9933 - val\_loss: 0.0179 -
+val\_soft\_acc: 0.9703 - val\_mse: 3.3238e-04 - val\_mae: 0.0097 - val\_RMSE: 0.0188
+- val\_mape: 5.8527 - val\_MPE: 1.1157 - val\_MSLE: 1.3738e-04 - val\_RMSLE: 0.0069
+- val\_R2: 0.9911
+
+Epoch 00024: val\_loss did not improve from 0.01790
+Epoch 25/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0182 - soft\_acc:
+0.9788 - mse: 3.3881e-04 - mae: 0.0110 - RMSE: 0.0182 - mape: 1339.5308 - MPE:
+-inf - MSLE: 1.5040e-04 - RMSLE: 0.0080 - R2: 0.9918 - val\_loss: 0.0178 -
+val\_soft\_acc: 0.9703 - val\_mse: 3.2603e-04 - val\_mae: 0.0097 - val\_RMSE: 0.0186
+- val\_mape: 5.8893 - val\_MPE: 1.4070 - val\_MSLE: 1.3537e-04 - val\_RMSLE: 0.0069
+- val\_R2: 0.9913
+
+Epoch 00025: val\_loss improved from 0.01790 to 0.01777, saving model to
+tmp\textbackslash{}ckeckpointer.ckpt
+INFO:tensorflow:Assets written to: tmp\textbackslash{}ckeckpointer.ckpt\textbackslash{}assets
+Epoch 26/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0169 - soft\_acc:
+0.9786 - mse: 3.0087e-04 - mae: 0.0098 - RMSE: 0.0169 - mape: 2374.9665 - MPE:
+-inf - MSLE: 1.3281e-04 - RMSLE: 0.0071 - R2: 0.9932 - val\_loss: 0.0177 -
+val\_soft\_acc: 0.9703 - val\_mse: 3.2450e-04 - val\_mae: 0.0096 - val\_RMSE: 0.0185
+- val\_mape: 6.2016 - val\_MPE: -2.5596 - val\_MSLE: 1.3371e-04 - val\_RMSLE: 0.0067
+- val\_R2: 0.9914
+
+Epoch 00026: val\_loss improved from 0.01777 to 0.01770, saving model to
+tmp\textbackslash{}ckeckpointer.ckpt
+INFO:tensorflow:Assets written to: tmp\textbackslash{}ckeckpointer.ckpt\textbackslash{}assets
+Epoch 27/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0159 - soft\_acc:
+0.9835 - mse: 2.6730e-04 - mae: 0.0086 - RMSE: 0.0159 - mape: 1857.4715 - MPE:
+-inf - MSLE: 1.1299e-04 - RMSLE: 0.0062 - R2: 0.9933 - val\_loss: 0.0172 -
+val\_soft\_acc: 0.9738 - val\_mse: 3.0634e-04 - val\_mae: 0.0093 - val\_RMSE: 0.0181
+- val\_mape: 5.9751 - val\_MPE: -1.3736 - val\_MSLE: 1.2709e-04 - val\_RMSLE: 0.0066
+- val\_R2: 0.9917
+
+Epoch 00027: val\_loss improved from 0.01770 to 0.01721, saving model to
+tmp\textbackslash{}ckeckpointer.ckpt
+INFO:tensorflow:Assets written to: tmp\textbackslash{}ckeckpointer.ckpt\textbackslash{}assets
+Epoch 28/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0165 - soft\_acc:
+0.9868 - mse: 2.8310e-04 - mae: 0.0089 - RMSE: 0.0165 - mape: 2446.6873 - MPE:
+-inf - MSLE: 1.2080e-04 - RMSLE: 0.0064 - R2: 0.9933 - val\_loss: 0.0175 -
+val\_soft\_acc: 0.9712 - val\_mse: 3.1682e-04 - val\_mae: 0.0099 - val\_RMSE: 0.0183
+- val\_mape: 8.6990 - val\_MPE: -6.4365 - val\_MSLE: 1.3339e-04 - val\_RMSLE: 0.0071
+- val\_R2: 0.9916
+
+Epoch 00028: val\_loss did not improve from 0.01721
+Epoch 29/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0168 - soft\_acc:
+0.9846 - mse: 2.9124e-04 - mae: 0.0091 - RMSE: 0.0169 - mape: 1831.8570 - MPE:
+-inf - MSLE: 1.2642e-04 - RMSLE: 0.0066 - R2: 0.9932 - val\_loss: 0.0171 -
+val\_soft\_acc: 0.9729 - val\_mse: 3.0252e-04 - val\_mae: 0.0098 - val\_RMSE: 0.0180
+- val\_mape: 5.7162 - val\_MPE: 1.2424 - val\_MSLE: 1.2721e-04 - val\_RMSLE: 0.0069
+- val\_R2: 0.9918
+
+Epoch 00029: val\_loss improved from 0.01721 to 0.01712, saving model to
+tmp\textbackslash{}ckeckpointer.ckpt
+INFO:tensorflow:Assets written to: tmp\textbackslash{}ckeckpointer.ckpt\textbackslash{}assets
+Epoch 30/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0160 - soft\_acc:
+0.9803 - mse: 2.6481e-04 - mae: 0.0090 - RMSE: 0.0159 - mape: 916.9306 - MPE:
+-inf - MSLE: 1.1269e-04 - RMSLE: 0.0064 - R2: 0.9940 - val\_loss: 0.0171 -
+val\_soft\_acc: 0.9729 - val\_mse: 3.0074e-04 - val\_mae: 0.0098 - val\_RMSE: 0.0180
+- val\_mape: 5.7832 - val\_MPE: 1.7475 - val\_MSLE: 1.2723e-04 - val\_RMSLE: 0.0070
+- val\_R2: 0.9918
+
+Epoch 00030: val\_loss improved from 0.01712 to 0.01708, saving model to
+tmp\textbackslash{}ckeckpointer.ckpt
+INFO:tensorflow:Assets written to: tmp\textbackslash{}ckeckpointer.ckpt\textbackslash{}assets
+Epoch 31/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0169 - soft\_acc:
+0.9802 - mse: 2.9786e-04 - mae: 0.0098 - RMSE: 0.0169 - mape: 357.1914 - MPE:
+-inf - MSLE: 1.2675e-04 - RMSLE: 0.0070 - R2: 0.9931 - val\_loss: 0.0179 -
+val\_soft\_acc: 0.9712 - val\_mse: 3.2770e-04 - val\_mae: 0.0114 - val\_RMSE: 0.0188
+- val\_mape: 7.3403 - val\_MPE: 5.4104 - val\_MSLE: 1.4370e-04 - val\_RMSLE: 0.0082
+- val\_R2: 0.9911
+
+Epoch 00031: val\_loss did not improve from 0.01708
+Epoch 32/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0169 - soft\_acc:
+0.9835 - mse: 2.9948e-04 - mae: 0.0098 - RMSE: 0.0169 - mape: 2251.9771 - MPE:
+-inf - MSLE: 1.3007e-04 - RMSLE: 0.0071 - R2: 0.9931 - val\_loss: 0.0165 -
+val\_soft\_acc: 0.9746 - val\_mse: 2.8149e-04 - val\_mae: 0.0091 - val\_RMSE: 0.0173
+- val\_mape: 7.3964 - val\_MPE: -4.6022 - val\_MSLE: 1.1812e-04 - val\_RMSLE: 0.0065
+- val\_R2: 0.9925
+
+Epoch 00032: val\_loss improved from 0.01708 to 0.01651, saving model to
+tmp\textbackslash{}ckeckpointer.ckpt
+INFO:tensorflow:Assets written to: tmp\textbackslash{}ckeckpointer.ckpt\textbackslash{}assets
+Epoch 33/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0153 - soft\_acc:
+0.9821 - mse: 2.4631e-04 - mae: 0.0090 - RMSE: 0.0153 - mape: 4213.2886 - MPE:
+-inf - MSLE: 1.0888e-04 - RMSLE: 0.0065 - R2: 0.9943 - val\_loss: 0.0164 -
+val\_soft\_acc: 0.9729 - val\_mse: 2.7815e-04 - val\_mae: 0.0089 - val\_RMSE: 0.0172
+- val\_mape: 5.5174 - val\_MPE: -1.1442 - val\_MSLE: 1.1596e-04 - val\_RMSLE: 0.0063
+- val\_R2: 0.9926
+
+Epoch 00033: val\_loss improved from 0.01651 to 0.01643, saving model to
+tmp\textbackslash{}ckeckpointer.ckpt
+INFO:tensorflow:Assets written to: tmp\textbackslash{}ckeckpointer.ckpt\textbackslash{}assets
+Epoch 34/200
+25/25 [==============================] - 0s 9ms/step - loss: 0.0162 - soft\_acc:
+0.9847 - mse: 2.7626e-04 - mae: 0.0088 - RMSE: 0.0161 - mape: 372.5754 - MPE:
+-inf - MSLE: 1.1942e-04 - RMSLE: 0.0062 - R2: 0.9937 - val\_loss: 0.0163 -
+val\_soft\_acc: 0.9746 - val\_mse: 2.7321e-04 - val\_mae: 0.0091 - val\_RMSE: 0.0171
+- val\_mape: 6.1135 - val\_MPE: -1.9166 - val\_MSLE: 1.1473e-04 - val\_RMSLE: 0.0064
+- val\_R2: 0.9926
+
+Epoch 00034: val\_loss improved from 0.01643 to 0.01628, saving model to
+tmp\textbackslash{}ckeckpointer.ckpt
+INFO:tensorflow:Assets written to: tmp\textbackslash{}ckeckpointer.ckpt\textbackslash{}assets
+Epoch 35/200
+25/25 [==============================] - 0s 9ms/step - loss: 0.0152 - soft\_acc:
+0.9839 - mse: 2.3452e-04 - mae: 0.0086 - RMSE: 0.0152 - mape: 6208.0151 - MPE:
+-inf - MSLE: 1.0278e-04 - RMSLE: 0.0062 - R2: 0.9945 - val\_loss: 0.0161 -
+val\_soft\_acc: 0.9746 - val\_mse: 2.6850e-04 - val\_mae: 0.0088 - val\_RMSE: 0.0170
+- val\_mape: 6.0768 - val\_MPE: -2.6731 - val\_MSLE: 1.1247e-04 - val\_RMSLE: 0.0062
+- val\_R2: 0.9928
+
+Epoch 00035: val\_loss improved from 0.01628 to 0.01615, saving model to
+tmp\textbackslash{}ckeckpointer.ckpt
+INFO:tensorflow:Assets written to: tmp\textbackslash{}ckeckpointer.ckpt\textbackslash{}assets
+Epoch 36/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0152 - soft\_acc:
+0.9842 - mse: 2.3840e-04 - mae: 0.0089 - RMSE: 0.0152 - mape: 437.0283 - MPE:
+-inf - MSLE: 1.0652e-04 - RMSLE: 0.0064 - R2: 0.9941 - val\_loss: 0.0162 -
+val\_soft\_acc: 0.9712 - val\_mse: 2.6981e-04 - val\_mae: 0.0088 - val\_RMSE: 0.0169
+- val\_mape: 5.4708 - val\_MPE: -1.2429 - val\_MSLE: 1.1285e-04 - val\_RMSLE: 0.0062
+- val\_R2: 0.9928
+
+Epoch 00036: val\_loss did not improve from 0.01615
+Epoch 37/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0157 - soft\_acc:
+0.9784 - mse: 2.5590e-04 - mae: 0.0089 - RMSE: 0.0157 - mape: 1690.8989 - MPE:
+-inf - MSLE: 1.1299e-04 - RMSLE: 0.0064 - R2: 0.9939 - val\_loss: 0.0163 -
+val\_soft\_acc: 0.9738 - val\_mse: 2.7187e-04 - val\_mae: 0.0094 - val\_RMSE: 0.0171
+- val\_mape: 5.4822 - val\_MPE: 1.2683 - val\_MSLE: 1.1566e-04 - val\_RMSLE: 0.0067
+- val\_R2: 0.9926
+
+Epoch 00037: val\_loss did not improve from 0.01615
+Epoch 38/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0157 - soft\_acc:
+0.9812 - mse: 2.5378e-04 - mae: 0.0089 - RMSE: 0.0157 - mape: 1160.1034 - MPE:
+-inf - MSLE: 1.0897e-04 - RMSLE: 0.0064 - R2: 0.9939 - val\_loss: 0.0160 -
+val\_soft\_acc: 0.9764 - val\_mse: 2.6231e-04 - val\_mae: 0.0086 - val\_RMSE: 0.0167
+- val\_mape: 5.2619 - val\_MPE: 0.4669 - val\_MSLE: 1.0971e-04 - val\_RMSLE: 0.0061
+- val\_R2: 0.9930
+
+Epoch 00038: val\_loss improved from 0.01615 to 0.01596, saving model to
+tmp\textbackslash{}ckeckpointer.ckpt
+INFO:tensorflow:Assets written to: tmp\textbackslash{}ckeckpointer.ckpt\textbackslash{}assets
+Epoch 39/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0153 - soft\_acc:
+0.9843 - mse: 2.4178e-04 - mae: 0.0084 - RMSE: 0.0152 - mape: 267.0457 - MPE:
+-inf - MSLE: 1.0312e-04 - RMSLE: 0.0060 - R2: 0.9945 - val\_loss: 0.0164 -
+val\_soft\_acc: 0.9738 - val\_mse: 2.7692e-04 - val\_mae: 0.0090 - val\_RMSE: 0.0171
+- val\_mape: 6.8158 - val\_MPE: -4.2522 - val\_MSLE: 1.1516e-04 - val\_RMSLE: 0.0064
+- val\_R2: 0.9928
+
+Epoch 00039: val\_loss did not improve from 0.01596
+Epoch 40/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0158 - soft\_acc:
+0.9825 - mse: 2.5872e-04 - mae: 0.0089 - RMSE: 0.0158 - mape: 211.0300 - MPE:
+-inf - MSLE: 1.1244e-04 - RMSLE: 0.0064 - R2: 0.9939 - val\_loss: 0.0171 -
+val\_soft\_acc: 0.9703 - val\_mse: 2.9813e-04 - val\_mae: 0.0102 - val\_RMSE: 0.0176
+- val\_mape: 8.0166 - val\_MPE: -6.2196 - val\_MSLE: 1.2719e-04 - val\_RMSLE: 0.0073
+- val\_R2: 0.9924
+
+Epoch 00040: val\_loss did not improve from 0.01596
+Epoch 41/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0156 - soft\_acc:
+0.9863 - mse: 2.5294e-04 - mae: 0.0088 - RMSE: 0.0156 - mape: 456.3876 - MPE:
+-inf - MSLE: 1.0975e-04 - RMSLE: 0.0063 - R2: 0.9940 - val\_loss: 0.0155 -
+val\_soft\_acc: 0.9755 - val\_mse: 2.4728e-04 - val\_mae: 0.0085 - val\_RMSE: 0.0163
+- val\_mape: 5.1752 - val\_MPE: 0.4380 - val\_MSLE: 1.0442e-04 - val\_RMSLE: 0.0061
+- val\_R2: 0.9933
+
+Epoch 00041: val\_loss improved from 0.01596 to 0.01550, saving model to
+tmp\textbackslash{}ckeckpointer.ckpt
+INFO:tensorflow:Assets written to: tmp\textbackslash{}ckeckpointer.ckpt\textbackslash{}assets
+Epoch 42/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0144 - soft\_acc:
+0.9886 - mse: 2.2062e-04 - mae: 0.0080 - RMSE: 0.0144 - mape: 3459.1965 - MPE:
+-inf - MSLE: 9.8270e-05 - RMSLE: 0.0058 - R2: 0.9948 - val\_loss: 0.0162 -
+val\_soft\_acc: 0.9720 - val\_mse: 2.6871e-04 - val\_mae: 0.0090 - val\_RMSE: 0.0168
+- val\_mape: 5.9219 - val\_MPE: -3.0058 - val\_MSLE: 1.1255e-04 - val\_RMSLE: 0.0064
+- val\_R2: 0.9930
+
+Epoch 00042: val\_loss did not improve from 0.01550
+Epoch 43/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0159 - soft\_acc:
+0.9824 - mse: 2.7160e-04 - mae: 0.0089 - RMSE: 0.0159 - mape: 603.6849 - MPE:
+-inf - MSLE: 1.1694e-04 - RMSLE: 0.0064 - R2: 0.9937 - val\_loss: 0.0164 -
+val\_soft\_acc: 0.9720 - val\_mse: 2.7514e-04 - val\_mae: 0.0088 - val\_RMSE: 0.0169
+- val\_mape: 5.1839 - val\_MPE: -0.6919 - val\_MSLE: 1.1364e-04 - val\_RMSLE: 0.0062
+- val\_R2: 0.9929
+
+Epoch 00043: val\_loss did not improve from 0.01550
+Epoch 44/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0160 - soft\_acc:
+0.9809 - mse: 2.6917e-04 - mae: 0.0091 - RMSE: 0.0160 - mape: 1159.5668 - MPE:
+-inf - MSLE: 1.1488e-04 - RMSLE: 0.0065 - R2: 0.9937 - val\_loss: 0.0155 -
+val\_soft\_acc: 0.9764 - val\_mse: 2.4720e-04 - val\_mae: 0.0083 - val\_RMSE: 0.0163
+- val\_mape: 5.2653 - val\_MPE: -1.2176 - val\_MSLE: 1.0375e-04 - val\_RMSLE: 0.0059
+- val\_R2: 0.9934
+
+Epoch 00044: val\_loss did not improve from 0.01550
+Epoch 45/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0151 - soft\_acc:
+0.9845 - mse: 2.3497e-04 - mae: 0.0083 - RMSE: 0.0151 - mape: 294.7668 - MPE:
+-inf - MSLE: 9.9587e-05 - RMSLE: 0.0059 - R2: 0.9946 - val\_loss: 0.0155 -
+val\_soft\_acc: 0.9755 - val\_mse: 2.4735e-04 - val\_mae: 0.0089 - val\_RMSE: 0.0163
+- val\_mape: 8.3404 - val\_MPE: -6.1452 - val\_MSLE: 1.0654e-04 - val\_RMSLE: 0.0064
+- val\_R2: 0.9934
+
+Epoch 00045: val\_loss did not improve from 0.01550
+Epoch 46/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0144 - soft\_acc:
+0.9860 - mse: 2.1565e-04 - mae: 0.0082 - RMSE: 0.0144 - mape: 2779.3721 - MPE:
+-inf - MSLE: 9.5685e-05 - RMSLE: 0.0060 - R2: 0.9948 - val\_loss: 0.0154 -
+val\_soft\_acc: 0.9764 - val\_mse: 2.4420e-04 - val\_mae: 0.0084 - val\_RMSE: 0.0161
+- val\_mape: 5.2409 - val\_MPE: -0.8130 - val\_MSLE: 1.0221e-04 - val\_RMSLE: 0.0059
+- val\_R2: 0.9935
+
+Epoch 00046: val\_loss improved from 0.01550 to 0.01542, saving model to
+tmp\textbackslash{}ckeckpointer.ckpt
+INFO:tensorflow:Assets written to: tmp\textbackslash{}ckeckpointer.ckpt\textbackslash{}assets
+Epoch 47/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0152 - soft\_acc:
+0.9878 - mse: 2.4544e-04 - mae: 0.0083 - RMSE: 0.0152 - mape: 651.2839 - MPE:
+-inf - MSLE: 1.0323e-04 - RMSLE: 0.0059 - R2: 0.9943 - val\_loss: 0.0152 -
+val\_soft\_acc: 0.9764 - val\_mse: 2.3618e-04 - val\_mae: 0.0084 - val\_RMSE: 0.0159
+- val\_mape: 5.6613 - val\_MPE: 2.6650 - val\_MSLE: 1.0111e-04 - val\_RMSLE: 0.0061
+- val\_R2: 0.9937
+
+Epoch 00047: val\_loss improved from 0.01542 to 0.01518, saving model to
+tmp\textbackslash{}ckeckpointer.ckpt
+INFO:tensorflow:Assets written to: tmp\textbackslash{}ckeckpointer.ckpt\textbackslash{}assets
+Epoch 48/200
+25/25 [==============================] - 0s 9ms/step - loss: 0.0152 - soft\_acc:
+0.9857 - mse: 2.4011e-04 - mae: 0.0083 - RMSE: 0.0152 - mape: 1562.8400 - MPE:
+-inf - MSLE: 1.0407e-04 - RMSLE: 0.0060 - R2: 0.9943 - val\_loss: 0.0152 -
+val\_soft\_acc: 0.9729 - val\_mse: 2.3743e-04 - val\_mae: 0.0083 - val\_RMSE: 0.0159
+- val\_mape: 5.2055 - val\_MPE: 1.0778 - val\_MSLE: 1.0079e-04 - val\_RMSLE: 0.0059
+- val\_R2: 0.9937
+
+Epoch 00048: val\_loss did not improve from 0.01518
+Epoch 49/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0162 - soft\_acc:
+0.9847 - mse: 2.6783e-04 - mae: 0.0090 - RMSE: 0.0162 - mape: 349.3843 - MPE:
+-inf - MSLE: 1.1463e-04 - RMSLE: 0.0065 - R2: 0.9937 - val\_loss: 0.0160 -
+val\_soft\_acc: 0.9738 - val\_mse: 2.6133e-04 - val\_mae: 0.0101 - val\_RMSE: 0.0168
+- val\_mape: 6.5535 - val\_MPE: 4.6092 - val\_MSLE: 1.1626e-04 - val\_RMSLE: 0.0073
+- val\_R2: 0.9929
+
+Epoch 00049: val\_loss did not improve from 0.01518
+Epoch 50/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0147 - soft\_acc:
+0.9814 - mse: 2.2277e-04 - mae: 0.0083 - RMSE: 0.0147 - mape: 2574.2157 - MPE:
+-inf - MSLE: 9.6752e-05 - RMSLE: 0.0060 - R2: 0.9948 - val\_loss: 0.0155 -
+val\_soft\_acc: 0.9720 - val\_mse: 2.4425e-04 - val\_mae: 0.0086 - val\_RMSE: 0.0161
+- val\_mape: 6.2979 - val\_MPE: -3.6401 - val\_MSLE: 1.0329e-04 - val\_RMSLE: 0.0062
+- val\_R2: 0.9936
+
+Epoch 00050: val\_loss did not improve from 0.01518
+Epoch 51/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0153 - soft\_acc:
+0.9823 - mse: 2.3845e-04 - mae: 0.0091 - RMSE: 0.0154 - mape: 127.7951 - MPE:
+-inf - MSLE: 1.0409e-04 - RMSLE: 0.0065 - R2: 0.9945 - val\_loss: 0.0152 -
+val\_soft\_acc: 0.9764 - val\_mse: 2.3685e-04 - val\_mae: 0.0084 - val\_RMSE: 0.0159
+- val\_mape: 5.4101 - val\_MPE: 2.1620 - val\_MSLE: 1.0086e-04 - val\_RMSLE: 0.0060
+- val\_R2: 0.9937
+
+Epoch 00051: val\_loss did not improve from 0.01518
+Epoch 52/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0150 - soft\_acc:
+0.9864 - mse: 2.3084e-04 - mae: 0.0079 - RMSE: 0.0150 - mape: 1809.9790 - MPE:
+-inf - MSLE: 9.6272e-05 - RMSLE: 0.0057 - R2: 0.9946 - val\_loss: 0.0168 -
+val\_soft\_acc: 0.9712 - val\_mse: 2.8834e-04 - val\_mae: 0.0114 - val\_RMSE: 0.0176
+- val\_mape: 7.4638 - val\_MPE: 5.9537 - val\_MSLE: 1.3111e-04 - val\_RMSLE: 0.0083
+- val\_R2: 0.9923
+
+Epoch 00052: val\_loss did not improve from 0.01518
+Epoch 53/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0153 - soft\_acc:
+0.9819 - mse: 2.3990e-04 - mae: 0.0092 - RMSE: 0.0153 - mape: 2224.9102 - MPE:
+-inf - MSLE: 1.0726e-04 - RMSLE: 0.0067 - R2: 0.9941 - val\_loss: 0.0153 -
+val\_soft\_acc: 0.9746 - val\_mse: 2.4133e-04 - val\_mae: 0.0090 - val\_RMSE: 0.0161
+- val\_mape: 5.2285 - val\_MPE: 1.6214 - val\_MSLE: 1.0401e-04 - val\_RMSLE: 0.0064
+- val\_R2: 0.9934
+
+Epoch 00053: val\_loss did not improve from 0.01518
+Epoch 54/200
+25/25 [==============================] - 0s 9ms/step - loss: 0.0147 - soft\_acc:
+0.9833 - mse: 2.2280e-04 - mae: 0.0085 - RMSE: 0.0147 - mape: 42.4492 - MPE: inf
+- MSLE: 9.7055e-05 - RMSLE: 0.0061 - R2: 0.9947 - val\_loss: 0.0152 -
+val\_soft\_acc: 0.9746 - val\_mse: 2.3687e-04 - val\_mae: 0.0088 - val\_RMSE: 0.0159
+- val\_mape: 8.8350 - val\_MPE: -6.6440 - val\_MSLE: 1.0291e-04 - val\_RMSLE: 0.0064
+- val\_R2: 0.9936
+
+Epoch 00054: val\_loss did not improve from 0.01518
+Epoch 55/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0157 - soft\_acc:
+0.9818 - mse: 2.4979e-04 - mae: 0.0093 - RMSE: 0.0157 - mape: 2354.6518 - MPE:
+-inf - MSLE: 1.1090e-04 - RMSLE: 0.0068 - R2: 0.9943 - val\_loss: 0.0159 -
+val\_soft\_acc: 0.9720 - val\_mse: 2.5746e-04 - val\_mae: 0.0091 - val\_RMSE: 0.0164
+- val\_mape: 7.3763 - val\_MPE: -5.4096 - val\_MSLE: 1.0940e-04 - val\_RMSLE: 0.0066
+- val\_R2: 0.9934
+
+Epoch 00055: val\_loss did not improve from 0.01518
+Epoch 56/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0155 - soft\_acc:
+0.9796 - mse: 2.4692e-04 - mae: 0.0096 - RMSE: 0.0155 - mape: 404.0689 - MPE:
+-inf - MSLE: 1.1181e-04 - RMSLE: 0.0070 - R2: 0.9942 - val\_loss: 0.0165 -
+val\_soft\_acc: 0.9703 - val\_mse: 2.7844e-04 - val\_mae: 0.0101 - val\_RMSE: 0.0170
+- val\_mape: 8.1351 - val\_MPE: -6.4739 - val\_MSLE: 1.1985e-04 - val\_RMSLE: 0.0073
+- val\_R2: 0.9930
+
+Epoch 00056: val\_loss did not improve from 0.01518
+Epoch 57/200
+25/25 [==============================] - 0s 8ms/step - loss: 0.0150 - soft\_acc:
+0.9778 - mse: 2.3164e-04 - mae: 0.0097 - RMSE: 0.0150 - mape: 190.1999 - MPE:
+-inf - MSLE: 1.0646e-04 - RMSLE: 0.0071 - R2: 0.9946 - val\_loss: 0.0161 -
+val\_soft\_acc: 0.9746 - val\_mse: 2.6542e-04 - val\_mae: 0.0105 - val\_RMSE: 0.0169
+- val\_mape: 9.0060 - val\_MPE: 7.3535 - val\_MSLE: 1.2074e-04 - val\_RMSLE: 0.0077
+- val\_R2: 0.9929
+
+Epoch 00057: val\_loss did not improve from 0.01518
+25/25 [==============================] - 0s 2ms/step - loss: 0.0154 - soft\_acc:
+0.9859 - mse: 2.4505e-04 - mae: 0.0098 - RMSE: 0.0154 - mape: 802.3535 - MPE:
+inf - MSLE: 1.1239e-04 - RMSLE: 0.0073 - R2: 0.9943
+9/9 [==============================] - 0s 3ms/step - loss: 0.0161 - soft\_acc:
+0.9746 - mse: 2.6542e-04 - mae: 0.0105 - RMSE: 0.0169 - mape: 9.0060 - MPE:
+7.3535 - MSLE: 1.2074e-04 - RMSLE: 0.0077 - R2: 0.9929
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{22}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{pred} \PY{o}{=} \PY{n}{model}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{x\PYZus{}test}\PY{p}{)}
+\PY{n}{pred}\PY{o}{.}\PY{n}{shape}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{22}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+(1017, 1)
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{23}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{pred} \PY{o}{=} \PY{n}{model}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{x\PYZus{}test}\PY{p}{)}
+\PY{n}{pred}\PY{o}{.}\PY{n}{shape}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{12}\PY{p}{,}\PY{l+m+mi}{9}\PY{p}{)}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{asarray}\PY{p}{(}\PY{n}{y\PYZus{}test}\PY{p}{)}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Test Price}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{pred}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Prediction Price}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{x\PYZus{}values} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1017}\PY{p}{)}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{scatter}\PY{p}{(}\PY{n}{x\PYZus{}values}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{asarray}\PY{p}{(}\PY{n}{y\PYZus{}test}\PY{p}{)}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{scatter}\PY{p}{(}\PY{n}{x\PYZus{}values}\PY{p}{,} \PY{n}{pred}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{history}\PY{o}{.}\PY{n}{history}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{loss}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{history}\PY{o}{.}\PY{n}{history}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{val\PYZus{}loss}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{model loss}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Root mean squared error(RMSE)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Epoch}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Train RMSE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Validation RMSE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{loc}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{upper left}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_23_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_23_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{24}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 원래값과 예측 값이 일치하면 직선에 가깝게 분포가 된다}
+
+\PY{o}{\PYZpc{}}\PY{k}{matplotlib} inline
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{scatter}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{asarray}\PY{p}{(}\PY{n}{y\PYZus{}test}\PY{p}{)}\PY{p}{,} \PY{n}{pred}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Price Index}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Predicted price Inde}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Prices vs Predicted price Index}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{24}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+Text(0.5, 1.0, 'Prices vs Predicted price Index')
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_24_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{25}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{history}\PY{o}{.}\PY{n}{history}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{val\PYZus{}soft\PYZus{}acc}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{history}\PY{o}{.}\PY{n}{history}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{soft\PYZus{}acc}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model Acurracy}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Accuracy}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{epoch}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Training Accuracy}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Validation Accuracy}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{loc}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{lower right}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_25_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{26}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{accuracy\PYZus{}train} \PY{o}{=} \PY{l+m+mi}{100}\PY{o}{*}\PY{n}{score\PYZus{}train}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}
+\PY{n}{accuracy\PYZus{}validation} \PY{o}{=} \PY{l+m+mi}{100}\PY{o}{*}\PY{n}{score\PYZus{}validation}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{train accuracy: }\PY{l+s+si}{\PYZpc{}.4f}\PY{l+s+si}{\PYZpc{}\PYZpc{}}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{n}{accuracy\PYZus{}train}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{validation accuracy: }\PY{l+s+si}{\PYZpc{}.4f}\PY{l+s+si}{\PYZpc{}\PYZpc{}}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{n}{accuracy\PYZus{}validation}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+train accuracy: 98.5937\%
+validation accuracy: 97.4634\%
+    \end{Verbatim}
+
+    \begin{quote}
+\begin{quote}
+R2\_Score가 train data에서 계산되면 모델이 샘플 내 분산을 얼마나
+설명하는지에 대해 알려주고 test data에서 계산되면 모델의 예측품질에 대해
+알려준다. 기계 학습 세계에서는 검증과 테스트 정확도를 모두 제시하는 것이
+매우 일반적이지만 가장 중요한 것은 테스트 정확도입니다. 그러나 한 쪽에서
+낮은 R2 점수를 받고 그렇지 않다면 뭔가 꺼진 것입니다. R2 test
+\textless\textless{} R2training이면 모델이 잘 일반화되지 않았음을
+나타낸다. 예를들어 테스트 세트에 future 데이타 만 포함되어 있으면 모델이
+잘 외삽되지 않는 것처럼 보입니다. 결론적으로 당신은 그것을 비교해야
+합니다. 그러나 대부분의 경우 가장 관심이 있는 테스트 세트 결과입니다
+\end{quote}
+\end{quote}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{27}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{metrics} \PY{k+kn}{import} \PY{n}{r2\PYZus{}score}
+\PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{metrics} \PY{k+kn}{import} \PY{n}{mean\PYZus{}squared\PYZus{}log\PYZus{}error}
+
+\PY{n}{Y} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{asarray}\PY{p}{(}\PY{n}{y\PYZus{}test}\PY{p}{)}
+\PY{n}{Y\PYZus{}hat} \PY{o}{=} \PY{n}{pred}
+
+\PY{k}{def} \PY{n+nf}{MSE}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{square}\PY{p}{(}\PY{p}{(}\PY{n}{y\PYZus{}true} \PY{o}{\PYZhy{}} \PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+
+\PY{k}{def} \PY{n+nf}{MAE}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{p}{:} 
+    \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{abs}\PY{p}{(}\PY{p}{(}\PY{n}{y\PYZus{}true} \PY{o}{\PYZhy{}} \PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+
+\PY{k}{def} \PY{n+nf}{RMSE}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{(}\PY{n}{y\PYZus{}pred}\PY{o}{\PYZhy{}}\PY{n}{y\PYZus{}true}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}
+
+\PY{k}{def} \PY{n+nf}{MAPE}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{p}{:} 
+    \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{abs}\PY{p}{(}\PY{p}{(}\PY{n}{y\PYZus{}true} \PY{o}{\PYZhy{}} \PY{n}{y\PYZus{}pred}\PY{p}{)} \PY{o}{/} \PY{n}{y\PYZus{}true}\PY{p}{)}\PY{p}{)} \PY{o}{*} \PY{l+m+mi}{100}
+
+\PY{k}{def} \PY{n+nf}{MPE}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{p}{:} 
+    \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{(}\PY{n}{y\PYZus{}true} \PY{o}{\PYZhy{}} \PY{n}{y\PYZus{}pred}\PY{p}{)} \PY{o}{/} \PY{n}{y\PYZus{}true}\PY{p}{)} \PY{o}{*} \PY{l+m+mi}{100}
+
+\PY{k}{def} \PY{n+nf}{root\PYZus{}mean\PYZus{}squared\PYZus{}log\PYZus{}error}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{p}{:} 
+    \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{mean\PYZus{}squared\PYZus{}log\PYZus{}error}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{R2\PYZus{}Score}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}}\PY{l+s+s1}{\PYZsq{}} \PY{o}{*} \PY{l+m+mi}{40}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{train error: }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ |}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{valid error: }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ |}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{test error : }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{score\PYZus{}train}\PY{p}{[}\PY{l+m+mi}{9}\PY{p}{]}\PY{p}{,} \PY{n}{score\PYZus{}validation}\PY{p}{[}\PY{l+m+mi}{9}\PY{p}{]}\PY{p}{,} \PY{n}{r2\PYZus{}score}\PY{p}{(}\PY{n}{Y}\PY{p}{,} \PY{n}{Y\PYZus{}hat}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Mean Squared Error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}}\PY{l+s+s1}{\PYZsq{}} \PY{o}{*} \PY{l+m+mi}{40}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{train error: }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ |}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{valid error: }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ |}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{test error : }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{score\PYZus{}train}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{,} \PY{n}{score\PYZus{}validation}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{,} \PY{n}{MSE}\PY{p}{(}\PY{n}{Y}\PY{p}{,} \PY{n}{Y\PYZus{}hat}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Mean Absolute Error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}}\PY{l+s+s1}{\PYZsq{}} \PY{o}{*} \PY{l+m+mi}{40}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{train error: }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ |}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{valid error: }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ |}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{test error : }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{score\PYZus{}train}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{,} \PY{n}{score\PYZus{}validation}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{,} \PY{n}{MAE}\PY{p}{(}\PY{n}{Y}\PY{p}{,} \PY{n}{Y\PYZus{}hat}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Root Mean Squared Error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}}\PY{l+s+s1}{\PYZsq{}} \PY{o}{*} \PY{l+m+mi}{40}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{train error: }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ |}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{valid error: }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ |}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{test error : }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{score\PYZus{}train}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{,} \PY{n}{score\PYZus{}validation}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{,} \PY{n}{RMSE}\PY{p}{(}\PY{n}{Y}\PY{p}{,} \PY{n}{Y\PYZus{}hat}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Mean Squared Logarithmic Error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}}\PY{l+s+s1}{\PYZsq{}} \PY{o}{*} \PY{l+m+mi}{40}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{train error: }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ |}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{valid error: }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ |}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{test error : }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{score\PYZus{}train}\PY{p}{[}\PY{l+m+mi}{7}\PY{p}{]}\PY{p}{,} \PY{n}{score\PYZus{}validation}\PY{p}{[}\PY{l+m+mi}{7}\PY{p}{]}\PY{p}{,} \PY{n}{mean\PYZus{}squared\PYZus{}log\PYZus{}error}\PY{p}{(}\PY{n}{Y}\PY{p}{,} \PY{n}{Y\PYZus{}hat}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Root Mean Squared Logarithmic Error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}}\PY{l+s+s1}{\PYZsq{}} \PY{o}{*} \PY{l+m+mi}{40}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{train error: }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ |}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{valid error: }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ |}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{test error : }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{score\PYZus{}train}\PY{p}{[}\PY{l+m+mi}{8}\PY{p}{]}\PY{p}{,} \PY{n}{score\PYZus{}validation}\PY{p}{[}\PY{l+m+mi}{8}\PY{p}{]}\PY{p}{,} \PY{n}{root\PYZus{}mean\PYZus{}squared\PYZus{}log\PYZus{}error}\PY{p}{(}\PY{n}{Y}\PY{p}{,} \PY{n}{Y\PYZus{}hat}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Mean Absolute Percentage Error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}}\PY{l+s+s1}{\PYZsq{}} \PY{o}{*} \PY{l+m+mi}{40}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{train error: }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ |}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{valid error: }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ |}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{test error : }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{score\PYZus{}train}\PY{p}{[}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{,} \PY{n}{score\PYZus{}validation}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{,} \PY{n}{MAPE}\PY{p}{(}\PY{n}{Y}\PY{p}{,} \PY{n}{Y\PYZus{}hat}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Mean Percentage Error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}}\PY{l+s+s1}{\PYZsq{}} \PY{o}{*} \PY{l+m+mi}{40}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{train error: }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ |}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{valid error: }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ |}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{test error : }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{score\PYZus{}train}\PY{p}{[}\PY{l+m+mi}{6}\PY{p}{]}\PY{p}{,} \PY{n}{score\PYZus{}validation}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{,} \PY{n}{MPE}\PY{p}{(}\PY{n}{Y}\PY{p}{,} \PY{n}{Y\PYZus{}hat}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+R2\_Score
+----------------------------------------
+train error: 0.9942859411239624 |
+valid error: 0.992901086807251 |
+test error : 0.969569823591676
+
+Mean Squared Error
+----------------------------------------
+train error: 0.00024504572502337396 |
+valid error: 0.0002654152922332287 |
+test error : 0.00019094254030111796
+
+Mean Absolute Error
+----------------------------------------
+train error: 0.009836779907345772 |
+valid error: 0.01048602070659399 |
+test error : 0.009594846344983357
+
+Root Mean Squared Error
+----------------------------------------
+train error: 0.015370653010904789 |
+valid error: 0.01048602070659399 |
+test error : 0.013818195985768835
+
+Mean Squared Logarithmic Error
+----------------------------------------
+train error: 0.00011239355808356777 |
+valid error: 0.0001207444875035435 |
+test error : 7.643460276778266e-05
+
+Root Mean Squared Logarithmic Error
+----------------------------------------
+train error: 0.007310476154088974 |
+valid error: 0.007747378665953875 |
+test error : 0.008742688532012488
+
+Mean Absolute Percentage Error
+----------------------------------------
+train error: 802.353515625 |
+valid error: 0.01048602070659399 |
+test error : 1.7292413517444112
+
+Mean Percentage Error
+----------------------------------------
+train error: inf |
+valid error: 0.01048602070659399 |
+test error : 1.037522508518689
+
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{28}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} count : 개수, std : 표준편차}
+
+\PY{n}{test}\PY{p}{[}\PY{n}{label\PYZus{}cols}\PY{p}{]}\PY{o}{.}\PY{n}{describe}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{28}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+             Close
+count  1037.000000
+mean      0.551764
+std       0.079329
+min       0.314971
+25\%       0.498957
+50\%       0.535049
+75\%       0.565572
+max       0.837970
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\end{tcolorbox}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
