@@ -2,6 +2,8 @@
 
 # 다음과 같은 논문을 참조하였습니다
 
+21-02-19 갱신
+
 
 [1]	S. Hochreiter and J. Urgen Schmidhuber, “Long Shortterm Memory,” Neural Comput., vol. 9, no. 8, p. 17351780, 1997, [Online]. Available: http://www7.informatik.tu-muenchen.de/~hochreit%0Ahttp://www.idsia.ch/~juergen.
 
