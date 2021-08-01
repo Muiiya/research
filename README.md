@@ -1,9 +1,16 @@
 # research
 
-# 다음과 같은 논문을 참조하였습니다
+21-08-01
+
+Stationary data로 전처리해서 인포머 모델을 돌려서 MSE와 MAE를 구할 것이다. 
+
+21-07-31 
+
+Unstationary data를 가지고 인포머 모델을 돌려서 MSE와 MAE를 구하였다
 
 21-02-19
 
+# 다음과 같은 논문을 참조하였습니다
 
 [1]	S. Hochreiter and J. Urgen Schmidhuber, “Long Shortterm Memory,” Neural Comput., vol. 9, no. 8, p. 17351780, 1997, [Online]. Available: http://www7.informatik.tu-muenchen.de/~hochreit%0Ahttp://www.idsia.ch/~juergen.
 
